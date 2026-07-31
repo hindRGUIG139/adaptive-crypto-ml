@@ -1,5 +1,41 @@
-from Crypto.Cipher import AES #Import the AES module from the PyCryptodome library
-from Crypto.Random import get_random_bytes 
-key = get_random_bytes(16) #AES-128 requires a 16-byte key
-with open("data/sample.txt", "rb") as file:
-    plaintext = file.read()
+from Crypto.Cipher import AES
+from Crypto.Random import get_random_bytes
+
+def encrypt_file(input_file, output_file, key):
+    with open(input_file, "rb") as file:
+        plaintext = file.read()
+
+    cipher = AES.new(key, AES.MODE_CTR)
+    ciphertext = cipher.encrypt(plaintext)
+
+    with open(output_file, "wb") as file:
+        file.write(cipher.nonce)
+        file.write(ciphertext)
+        
+def decrypt_file(input_file, output_file, key):
+    with open(input_file, "rb") as file:
+        nonce = file.read(8)
+        ciphertext = file.read()
+
+    cipher = AES.new(key, AES.MODE_CTR, nonce=nonce)
+    plaintext = cipher.decrypt(ciphertext)
+
+    with open(output_file, "wb") as file:
+        file.write(plaintext)
+
+def main():
+    key = get_random_bytes(16)  # AES-128
+    encrypt_file(
+        "data/sample.txt",
+        "data/sample.enc",
+        key
+    )
+    decrypt_file(
+        "data/sample.enc",
+        "data/sample_decrypted.txt",
+        key
+    )
+    print("Encryption and decryption completed successfully!")
+
+if __name__ == "__main__":
+    main()
