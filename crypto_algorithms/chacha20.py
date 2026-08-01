@@ -35,7 +35,10 @@ def main():
         "data/sample_decrypted.txt",
         key
     )
-    print("Encryption and decryption completed successfully!")
-
+    with open("data/sample.txt", "rb") as file:
+        original = file.read()
+    with open("data/sample_decrypted.txt", "rb") as file:
+        decrypted = file.read()
+    print("Match:", original == decrypted)
 if __name__ == "__main__":
     main()
