@@ -11,7 +11,7 @@ def encrypt_file(input_file, output_file, key):
     with open(output_file, "wb") as file:
         file.write(cipher.nonce)
         file.write(ciphertext)
-        
+
 def decrypt_file(input_file, output_file, key):
     with open(input_file, "rb") as file:
         nonce = file.read(8)
@@ -24,18 +24,16 @@ def decrypt_file(input_file, output_file, key):
         file.write(plaintext)
 
 def main():
-    key = get_random_bytes(16)  # AES-128
-    encrypt_file(
-        "data/sample.txt",
-        "data/sample.enc",
-        key
-    )
-    decrypt_file(
-        "data/sample.enc",
-        "data/sample_decrypted.txt",
-        key
-    )
-    print("Encryption and decryption completed successfully!")
+    key = get_random_bytes(16)
+    encrypt_file("data/sample.txt", "data/sample.enc", key)
+    decrypt_file("data/sample.enc", "data/sample_decrypted.txt", key)
+    with open("data/sample.txt", "rb") as file:
+        original = file.read()
 
+    with open("data/sample_decrypted.txt", "rb") as file:
+        decrypted = file.read()
+
+
+    print("Match:", original == decrypted)  # this is the real test
 if __name__ == "__main__":
-    main()
+  main()
