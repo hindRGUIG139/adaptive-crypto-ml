@@ -25,15 +25,13 @@ def decrypt_file(input_file, output_file, key):
 
 def main():
     key = get_random_bytes(16)
-    encrypt_file("data/sample.txt", "data/sample.enc", key)
-    decrypt_file("data/sample.enc", "data/sample_decrypted.txt", key)
-    with open("data/sample.txt", "rb") as file:
+    encrypt_file("data/Screen Recording 2025-10-20 215011.mp4", "data/sample.enc", key)
+    decrypt_file("data/sample.enc", "data/sample_decrypted.mp4", key)
+
+    with open("data/Screen Recording 2025-10-20 215011.mp4", "rb") as file:
         original = file.read()
-
-    with open("data/sample_decrypted.txt", "rb") as file:
+    with open("data/sample_decrypted.mp4", "rb") as file:
         decrypted = file.read()
-
-
     print("Match:", original == decrypted)  # this is the real test
 if __name__ == "__main__":
   main()
