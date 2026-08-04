@@ -36,27 +36,25 @@ def save_to_csv(data_type, file_size, algorithm, average_time, standard_deviatio
         writer = csv.writer(file)
         if file.tell() == 0:
             writer.writerow(["Data Type","File Size (Bytes)", "Algorithm", "Average Time (s)", "Standard Deviation (s)",
-                            "CPU Usage (%)","Battery Level (%)" ])
+                             "Throughput (MB/s)", "CPU Usage (%)","Battery Level (%)" ])
         writer.writerow([data_type, file_size, algorithm, average_time, standard_deviation, throughput, cpu, battery])
 
-
-def main():
-    input_file = "data/vtest.mp4"
-    # file_info
+def benchmark_file(input_file):
     file_info = get_file_info(input_file)
     data_type = file_info["data_type"]
     file_size = file_info["size_bytes"]
-    output_file = "data/vtest.enc"
-    # keys
-    key_aes = os.urandom(16)  # 128-bit key for AES
-    key_present = int.from_bytes(os.urandom(10), "big")  # 80-bit key for PRESENT
-    key_chacha20= os.urandom(32)  # 256-bit key for ChaCha20
+    output_file = input_file + ".enc"
+
+    key_aes = os.urandom(16)
+    key_present = int.from_bytes(os.urandom(10), "big")
+    key_chacha20 = os.urandom(32)
+
     print("Benchmarking AES...")
     aes_time, aes_std, aes_cpu, aes_battery, aes_throughput = benchmark_algorithm(aes_encrypt, input_file, output_file, key_aes)
-
+    
     print("Benchmarking PRESENT...")
     present_time, present_std ,present_cpu, present_battery, present_throughput = benchmark_algorithm(present_encrypt, input_file, output_file, key_present)
-
+    
     print("Benchmarking ChaCha20...")
     chacha20_time, chacha20_std ,chacha20_cpu, chacha20_battery, chacha20_throughput= benchmark_algorithm(chacha20_encrypt, input_file, output_file, key_chacha20)
     #aes
@@ -80,6 +78,8 @@ def main():
     print(f"CPU Usage: {chacha20_cpu}%")
     print(f"Battery Level: {chacha20_battery}%")
     save_to_csv(data_type, file_size, "ChaCha20", chacha20_time, chacha20_std, chacha20_throughput, chacha20_cpu, chacha20_battery)
-
+#main function to benchmark a specific file
+def main():
+    benchmark_file("data/sample_1KB.txt")
 if __name__ == "__main__":
     main()

@@ -1,4 +1,5 @@
 from Crypto.Random import get_random_bytes
+import os
 
 SBOX = [
     0xC, 0x5, 0x6, 0xB, 0x9, 0x0, 0xA, 0xD,
@@ -80,15 +81,18 @@ def present_ctr(data: bytes, key: int, nonce: int = 0) -> bytes:
         counter = (counter + 1) & ((1 << 64) - 1)
     return bytes(out)
 
-def encrypt_file(input_file, output_file, key, nonce=0):
+def encrypt_file(input_file, output_file, key):
+    nonce = int.from_bytes(os.urandom(8), "big")
     with open(input_file, "rb") as f:
         plaintext = f.read()
     ciphertext = present_ctr(plaintext, key, nonce)
     with open(output_file, "wb") as f:
+        f.write(nonce.to_bytes(8, "big"))
         f.write(ciphertext)
 
-def decrypt_file(input_file, output_file, key, nonce=0):
+def decrypt_file(input_file, output_file, key):
     with open(input_file, "rb") as f:
+        nonce = int.from_bytes(f.read(8), "big")
         ciphertext = f.read()
     plaintext = present_ctr(ciphertext, key, nonce)
     with open(output_file, "wb") as f:
@@ -98,10 +102,10 @@ def main():
     key = int.from_bytes(get_random_bytes(10), "big")  # 80-bit key
     nonce = 0 # just for test I need to change it later 
 
-    encrypt_file("data/sample.txt", "data/sample.enc", key, nonce)
-    decrypt_file("data/sample.enc", "data/sample_decrypted.txt", key, nonce)
+    encrypt_file("data/sample_1KB.txt", "data/sample_1KB.enc", key)
+    decrypt_file("data/sample_1KB.enc", "data/sample_decrypted.txt", key)
 
-    with open("data/sample.txt", "rb") as f:
+    with open("data/sample_1KB.txt", "rb") as f:
         original = f.read()
     with open("data/sample_decrypted.txt", "rb") as f:
         decrypted = f.read()

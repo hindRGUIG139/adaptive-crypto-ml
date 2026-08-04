@@ -20,7 +20,8 @@ def get_file_info(file_path):
     ".wav": "Audio",
     ".mp4": "Video",
     ".avi": "Video",
-    ".zip": "Archive"
+    ".zip": "Archive",
+    ".docx": "DOCX"
 }
     
     return {
