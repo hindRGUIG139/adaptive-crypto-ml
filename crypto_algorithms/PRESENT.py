@@ -98,7 +98,7 @@ def decrypt_file(input_file, output_file, key):
     with open(output_file, "wb") as f:
         f.write(plaintext)
 
-def main():
+def main(): #test the PRESENT implementation
     key = int.from_bytes(get_random_bytes(10), "big")  # 80-bit key
     nonce = 0 # just for test I need to change it later 
 
