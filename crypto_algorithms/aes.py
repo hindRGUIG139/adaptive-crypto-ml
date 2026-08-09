@@ -17,14 +17,14 @@ def decrypt_file(input_file, output_file, key):
         nonce = file.read(8)
         ciphertext = file.read()
 
-    cipher = AES.new(key, AES.MODE_CTR, nonce=nonce)
+    cipher = AES.new(key, AES.MODE_CTR)
     plaintext = cipher.decrypt(ciphertext)
 
     with open(output_file, "wb") as file:
         file.write(plaintext)
 
 def main():
-    key = get_random_bytes(16)
+    key = get_random_bytes(32) # AES-256 key
     encrypt_file("data/Screen Recording 2025-10-20 215011.mp4", "data/sample.enc", key)
     decrypt_file("data/sample.enc", "data/sample_decrypted.mp4", key)
 
