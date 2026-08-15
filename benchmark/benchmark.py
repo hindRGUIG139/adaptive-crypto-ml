@@ -12,10 +12,8 @@ import csv
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 sys.path.insert(0, PROJECT_ROOT)
-def benchmark_algorithm(encrypt_function, input_file, output_file, key):
+def benchmark_algorithm(encrypt_function, input_file, output_file, key, cpu_ambient, battery_ambient):
     times = []
-    cpu_ambient= get_cpu_usage()
-    battery_ambient = get_battery_level()
     for _ in range(10):
         start = time.perf_counter()
         encrypt_function(input_file, output_file, key)
@@ -42,31 +40,11 @@ def save_to_csv(data_type, file_size, algorithm, average_time, standard_deviatio
                              "Throughput (MB/s)", "CPU Usage (%)","Battery Level (%)","CPU Usage After (%)","Battery Level After (%)"])
         writer.writerow([data_type, file_size, algorithm, average_time, standard_deviation, throughput, cpu_ambient, battery_ambient, cpu_after, battery_after])
 
-def save_ml_row(data_type, file_size, cpu_ambient,
-                battery_ambient, best_algorithm):
-
-    with open("ml/training_dataset.csv", "a", newline="") as file:
-        writer = csv.writer(file)
-
-        # Write the header only when the file is empty.
-        if file.tell() == 0:
-            writer.writerow([
-                "CPU Ambient (%)",
-                "Battery Ambient (%)",
-                "File Size (Bytes)",
-                "Data Type",
-                "Best Algorithm"
-            ])
-
-        writer.writerow([
-            cpu_ambient,
-            battery_ambient,
-            file_size,
-            data_type,
-            best_algorithm
-        ])
-
 def benchmark_file(input_file):
+
+    cpu_ambient= get_cpu_usage()
+    battery_ambient = get_battery_level()
+
     file_info = get_file_info(input_file)
     data_type = file_info["data_type"]
     file_size = file_info["size_bytes"]
@@ -77,13 +55,13 @@ def benchmark_file(input_file):
     key_chacha20 = os.urandom(32)
 
     print("Benchmarking AES...")
-    aes_time, aes_std, aes_cpu_ambient, aes_battery_ambient, aes_cpu_after, aes_battery_after, aes_throughput = benchmark_algorithm(aes_encrypt, input_file, output_file, key_aes)
+    aes_time, aes_std, aes_cpu_ambient, aes_battery_ambient, aes_cpu_after, aes_battery_after, aes_throughput = benchmark_algorithm(aes_encrypt, input_file, output_file, key_aes, cpu_ambient, battery_ambient)
     
     print("Benchmarking PRESENT...")
-    present_time, present_std ,present_cpu_ambient, present_battery_ambient, present_cpu_after, present_battery_after, present_throughput = benchmark_algorithm(present_encrypt, input_file, output_file, key_present)
+    present_time, present_std ,present_cpu_ambient, present_battery_ambient, present_cpu_after, present_battery_after, present_throughput = benchmark_algorithm(present_encrypt, input_file, output_file, key_present, cpu_ambient, battery_ambient)
     
     print("Benchmarking ChaCha20...")
-    chacha20_time, chacha20_std ,chacha20_cpu_ambient, chacha20_battery_ambient, chacha20_cpu_after, chacha20_battery_after, chacha20_throughput= benchmark_algorithm(chacha20_encrypt, input_file, output_file, key_chacha20)
+    chacha20_time, chacha20_std ,chacha20_cpu_ambient, chacha20_battery_ambient, chacha20_cpu_after, chacha20_battery_after, chacha20_throughput= benchmark_algorithm(chacha20_encrypt, input_file, output_file, key_chacha20, cpu_ambient, battery_ambient)
     #aes
     print(f"AES average encryption time: {aes_time:.6f} seconds")
     print(f"AES standard deviation: {aes_std:.6f} seconds")
@@ -122,9 +100,9 @@ def benchmark_file(input_file):
         "cpu": chacha20_cpu_after
     }
 }
-    return benchmark_results, aes_battery_ambient
+    return benchmark_results, battery_ambient , cpu_ambient
 #main function to benchmark a specific file
 def main():
-    benchmark_file("data/sample_10KB.txt")
+    benchmark_file("data/sample_100KB2.txt")
 if __name__ == "__main__":
     main()

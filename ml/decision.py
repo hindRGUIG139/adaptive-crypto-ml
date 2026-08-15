@@ -1,9 +1,33 @@
 from benchmark.benchmark import benchmark_file
+from monitoring.file_info import get_file_info
+import csv
+
+
+SECURITY_SCORES = {
+    "AES": 3,
+    "ChaCha20": 3,
+    "PRESENT": 1,
+}
+
+SECURITY_WEIGHT = 0.30
+
+PRESENT_MAX_BYTES = 16 * 1024 * 1024
+
+
+def apply_security_gate(benchmark_results, file_size):
+
+    if file_size > PRESENT_MAX_BYTES:
+        return {
+            algorithm: data
+            for algorithm, data in benchmark_results.items()
+            if algorithm != "PRESENT"
+        }
+
+    return benchmark_results
+
+
 def normalize_higher_is_better(values):
-    """
-    Higher value = better.
-    Used for throughput.
-    """
+
     minimum = min(values.values())
     maximum = max(values.values())
 
@@ -20,10 +44,6 @@ def normalize_higher_is_better(values):
 
 
 def normalize_lower_is_better(values):
-    """
-    Lower value = better.
-    Used for CPU usage.
-    """
 
     minimum = min(values.values())
     maximum = max(values.values())
@@ -40,97 +60,227 @@ def normalize_lower_is_better(values):
     }
 
 
-def calculate_scores(benchmark_results, battery_level):
-    """
-    Calculate a score for each algorithm.
+def calculate_scores(
+    benchmark_results,
+    battery_level,
+    file_size
+):
 
-    Battery level determines how important
-    throughput and CPU usage are.
-    """
+    candidates = apply_security_gate(
+        benchmark_results,
+        file_size
+    )
 
-    # Get the throughput of each algorithm.
     throughputs = {
         algorithm: data["throughput"]
-        for algorithm, data in benchmark_results.items()
+        for algorithm, data in candidates.items()
     }
 
-    # Get the CPU usage of each algorithm.
-    cpu_usage = {
-        algorithm: data["cpu"]
-        for algorithm, data in benchmark_results.items()
+    cpu_cost = {
+        algorithm: data["cpu"] * data["encryption_time"]
+        for algorithm, data in candidates.items()
     }
 
-    # Higher throughput = better.
     throughput_scores = normalize_higher_is_better(
         throughputs
     )
 
-    # Lower CPU usage = better.
     cpu_scores = normalize_lower_is_better(
-        cpu_usage
+        cpu_cost
     )
 
-    # Choose the weights according to battery level.
-    if battery_level <= 20:
-        throughput_weight = 0.30
-        cpu_weight = 0.70
+    security_scores = {
+        algorithm: SECURITY_SCORES[algorithm] / 3
+        for algorithm in candidates
+    }
 
-    elif battery_level <= 50:
-        throughput_weight = 0.50
-        cpu_weight = 0.50
+    remaining_budget = 1.0 - SECURITY_WEIGHT
 
-    else:
-        throughput_weight = 0.70
-        cpu_weight = 0.30
+    battery_ratio = battery_level / 100
+
+    throughput_ratio = (
+        0.30 + (0.40 * battery_ratio)
+    )
+
+    cpu_ratio = 1 - throughput_ratio
+
+    throughput_weight = (
+        remaining_budget * throughput_ratio
+    )
+
+    cpu_weight = (
+        remaining_budget * cpu_ratio
+    )
 
     scores = {}
 
-    for algorithm in benchmark_results:
+    for algorithm in candidates:
 
         scores[algorithm] = (
-            throughput_weight * throughput_scores[algorithm]
-            + cpu_weight * cpu_scores[algorithm]
+            SECURITY_WEIGHT
+            * security_scores[algorithm]
+
+            + throughput_weight
+            * throughput_scores[algorithm]
+
+            + cpu_weight
+            * cpu_scores[algorithm]
         )
 
-    return scores, throughput_weight, cpu_weight
+    return (
+        scores,
+        SECURITY_WEIGHT,
+        throughput_weight,
+        cpu_weight
+    )
 
-def select_best_algorithm(benchmark_results, battery_level):
-    """
-    Return the algorithm with the highest score.
 
-    This becomes the 'Best Algorithm' label
-    for the ML dataset.
-    """
+def select_best_algorithm(
+    benchmark_results,
+    battery_level,
+    file_size
+):
 
-    scores, throughput_weight, cpu_weight = calculate_scores(
+    (
+        scores,
+        security_weight,
+        throughput_weight,
+        cpu_weight
+    ) = calculate_scores(
         benchmark_results,
-        battery_level
+        battery_level,
+        file_size
     )
 
     best_algorithm = max(
         scores,
-        key=scores.get
+        key=lambda algorithm: (
+            scores[algorithm],
+            SECURITY_SCORES[algorithm]
+        )
     )
 
     return (
         best_algorithm,
         scores,
+        security_weight,
         throughput_weight,
         cpu_weight
     )
 
+
+def save_ml_dataset_row(
+    filename,
+    data_type,
+    file_size,
+    cpu_ambient,
+    battery_ambient,
+    best_algorithm
+):
+
+    with open(
+        "ml/training_dataset.csv",
+        "a",
+        newline=""
+    ) as file:
+
+        writer = csv.writer(file)
+
+        if file.tell() == 0:
+            writer.writerow([
+                "File Name",
+                "Data Type",
+                "File Size (Bytes)",
+                "CPU Ambient (%)",
+                "Battery Ambient (%)",
+                "Best Algorithm"
+            ])
+
+        writer.writerow([
+            filename,
+            data_type,
+            file_size,
+            cpu_ambient,
+            battery_ambient,
+            best_algorithm
+        ])
+
 def main():
 
-    benchmark_results, battery_ambient = benchmark_file("data/sample_100KB.txt")
-    (best_algorithm, scores, throughput_weight,cpu_weight) = select_best_algorithm(
-    benchmark_results,battery_ambient)
-    print(f"\nBattery Level ambient: {battery_ambient}%")
-    print(f"Throughput Weight: {throughput_weight:.2f}")
-    print(f"CPU Weight: {cpu_weight:.2f}")
-    print("\n--- Best Algorithm ---")
+    path = "data/sample_100KB.txt"
+    file_info = get_file_info(path)
+    data_type = file_info["data_type"]
+    file_size = file_info["size_bytes"]
+
+    (
+        benchmark_results,
+        battery_ambient,
+        cpu_ambient
+    ) = benchmark_file(path)
+
+    (
+        best_algorithm,
+        scores,
+        security_weight,
+        throughput_weight,
+        cpu_weight
+    ) = select_best_algorithm(
+        benchmark_results,
+        battery_ambient,
+        file_size
+    )
+
+    print(
+        f"\nBattery Level Ambient: "
+        f"{battery_ambient}%"
+    )
+
+    print(
+        f"CPU Level Ambient: "
+        f"{cpu_ambient}%"
+    )
+
+    print(
+        f"File Size: "
+        f"{file_size} bytes"
+    )
+
+    print(
+        f"Security Weight: "
+        f"{security_weight:.2f}"
+    )
+
+    print(
+        f"Throughput Weight: "
+        f"{throughput_weight:.2f}"
+    )
+
+    print(
+        f"CPU Weight: "
+        f"{cpu_weight:.2f}"
+    )
+
+    print("\n--- Scores ---")
+
     for algorithm, score in scores.items():
-        print(f"{algorithm}: {score:.4f}")
-    print(f"\nBest Algorithm: {best_algorithm}")
+
+        print(
+            f"{algorithm}: "
+            f"{score:.4f}"
+        )
+
+    print(
+        f"\nBest Algorithm: "
+        f"{best_algorithm}"
+    )
+
+    save_ml_dataset_row(
+        data_type,
+        file_size,
+        cpu_ambient,
+        battery_ambient,
+        best_algorithm
+    )
 
 if __name__ == "__main__":
     main()

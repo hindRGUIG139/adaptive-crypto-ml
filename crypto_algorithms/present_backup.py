@@ -99,8 +99,8 @@ def decrypt_file(input_file, output_file, key):
         f.write(plaintext)
 
 def main(): #test the PRESENT implementation
-    key = int.from_bytes(get_random_bytes(10), "big")  # 80-bit key
-    nonce = 0 # just for test I need to change it later 
+    key = int.from_bytes(get_random_bytes(16), "big")  # 128-bit key
+    nonce = int.from_bytes(get_random_bytes(8), "big")  # 64-bit nonce
 
     encrypt_file("data/sample_1KB.txt", "data/sample_1KB.enc", key)
     decrypt_file("data/sample_1KB.enc", "data/sample_decrypted.txt", key)
