@@ -6,7 +6,7 @@ import csv
 SECURITY_SCORES = {
     "AES": 3,
     "ChaCha20": 3,
-    "PRESENT": 1,
+    "PRESENT": 2,
 }
 
 SECURITY_WEIGHT = 0.30
