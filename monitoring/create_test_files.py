@@ -16,14 +16,8 @@ files = {
     "sample_1MB.txt": 1_048_576,
 }
 
-files_1= {
-    "sample_1MB2.txt": 1_048_576,
-    "sample_1MB3.txt": 1_048_576,
-    "sample_1MB4.txt": 1_048_576
-}
-
 # Create each file with random data
-for filename, size in files_1.items():
+for filename, size in files.items():
     with open(f"data/{filename}", "wb") as file:
         file.write(os.urandom(size))
 
