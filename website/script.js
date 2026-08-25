@@ -1,71 +1,52 @@
-function predictAlgorithm() {
+async function predictAlgorithm() {
+    // 1. Capture user inputs matching HTML IDs
+    const dataType = document.getElementById("dataType").value;
+    const fileSize = parseFloat(document.getElementById("fileSize").value) || 0;
+    const cpu = parseFloat(document.getElementById("cpu").value) || 0;
+    const battery = parseFloat(document.getElementById("battery").value) || 0;
 
-    const dataType =
-        document.getElementById("dataType").value;
+    // 2. Get UI result elements
+    const predictionBox = document.getElementById("prediction");
+    const predictionResult = document.getElementById("predictionResult");
+    const predictionReason = document.getElementById("predictionReason");
 
-    const fileSize =
-        Number(document.getElementById("fileSize").value);
+    // 3. Show loading status and unhide the prediction box
+    predictionBox.classList.remove("hidden");
+    predictionResult.innerText = "Calculating...";
+    predictionReason.innerText = "Evaluating system metrics with ML model...";
 
-    const cpu =
-        Number(document.getElementById("cpu").value);
+    // 4. Construct request payload for FastAPI
+    const payload = {
+        file_type: dataType,
+        file_size: fileSize,
+        cpu_usage: cpu,
+        battery_level: battery
+    };
 
-    const battery =
-        Number(document.getElementById("battery").value);
+    try {
+        // 5. Send POST request to your local Uvicorn server
+        const response = await fetch("http://127.0.0.1:8000/predict", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        });
 
-    let algorithm;
-    let reason;
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.detail || `Server returned status ${response.status}`);
+}
 
+        const data = await response.json();
 
-    if (fileSize > 16384) {
+        // 6. Update the HTML card with the ML model's prediction
+        predictionResult.innerText = data.recommended_algorithm;
+        predictionReason.innerText = `Optimal algorithm for a ${fileSize} KB ${dataType} file at ${cpu}% CPU and ${battery}% battery.`;
 
-        algorithm = "ChaCha20";
-
-        reason =
-            "PRESENT is excluded for files larger than 16 MB.";
-
-    } else if (battery < 25) {
-
-        algorithm = "ChaCha20";
-
-        reason =
-            "The battery level is low, so performance and CPU cost are prioritized.";
-
-    } else if (cpu > 70) {
-
-        algorithm = "ChaCha20";
-
-        reason =
-            "The CPU usage is high, so an efficient algorithm is preferred.";
-
-    } else if (
-        dataType === "text" &&
-        fileSize < 100
-    ) {
-
-        algorithm = "AES-256";
-
-        reason =
-            "AES-256 provides a strong security level for this context.";
-
-    } else {
-
-        algorithm = "ChaCha20";
-
-        reason =
-            "ChaCha20 provides a good balance between security and performance.";
-
+    } catch (error) {
+        console.error("Prediction Request Failed:", error);
+        predictionResult.innerText = "Connection Error";
+        predictionReason.innerText = "Unable to reach FastAPI server. Ensure uvicorn is running on port 8000.";
     }
-
-
-    document.getElementById(
-        "predictionResult"
-    ).textContent = algorithm;
-
-    document.getElementById(
-        "predictionReason"
-    ).textContent = reason;
-
-    document.getElementById(
-        "prediction"
-    ).classList.remove("hidden");
 }
