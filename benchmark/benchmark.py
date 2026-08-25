@@ -103,6 +103,6 @@ def benchmark_file(input_file):
     return benchmark_results, battery_ambient , cpu_ambient
 #main function to benchmark a specific file
 def main():
-    benchmark_file("data/sample_100KB2.txt")
+    benchmark_file("data/sample_1KB.txt")
 if __name__ == "__main__":
     main()

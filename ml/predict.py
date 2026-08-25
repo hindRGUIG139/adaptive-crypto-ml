@@ -2,12 +2,11 @@ import os
 import sys
 import joblib
 import pandas as pd
+from monitoring.file_info import get_file_info
+from monitoring.system_metrics import get_cpu_usage, get_battery_level
 
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, PROJECT_ROOT)
-
-from monitoring.file_info import get_file_info
-from monitoring.system_metrics import get_cpu_usage, get_battery_level
 
 model = joblib.load(os.path.join(PROJECT_ROOT, "ml", "best_model.pkl"))
 data_type_encoder = joblib.load(os.path.join(PROJECT_ROOT, "ml", "data_type_encoder.pkl"))

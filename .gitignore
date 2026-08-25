@@ -17,6 +17,10 @@ env/
 # Benchmark results
 *.csv
 
+*.pkl
+
+*.joblib
+
 # OS files
 .DS_Store
 Thumbs.db
