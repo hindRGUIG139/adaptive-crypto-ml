@@ -291,3 +291,19 @@ xml1.xml,XML,114,32.0,51,ChaCha20
 xml2.xml,XML,115,23.6,51,ChaCha20
 xml3.xml,XML,116,26.3,51,PRESENT
 xslt-pair.zip,Archive,2169,24.1,51,ChaCha20
+csv9.csv,CSV,90,15.0,38,PRESENT
+img1.jpg,Image,2048,18.4,38,ChaCha20
+img2 (1).jpg,Image,900,15.6,38,ChaCha20
+img2.jpg,Image,3072,26.0,38,ChaCha20
+img3.jpg,Image,900,21.4,37,ChaCha20
+img4.jpg,Image,71680,15.9,37,ChaCha20
+img5.jpg,Image,102400,10.1,37,ChaCha20
+vid10.mp4,Video,7340032,7.8,37,AES
+vid6.mp4,Video,11534336,11.4,37,AES
+vid7.mp4,Video,10485760,15.7,37,AES
+vid8.mp4,Video,12058624,21.2,36,AES
+vid9.mp4,Video,11848909,22.9,36,AES
+csv10.csv,CSV,91,7.3,35,ChaCha20
+csv11.csv,CSV,92,15.0,35,AES
+csv12.csv,CSV,93,17.0,35,PRESENT
+csv13.csv,CSV,94,26.3,35,ChaCha20
