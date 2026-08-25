@@ -24,3 +24,15 @@ env/
 # OS files
 .DS_Store
 Thumbs.db
+
+*.xml
+*.zip
+*.txt
+*.png
+*.jpg
+*.mp3
+*.mp4
+*.pdf
+*.docx
+*.json
+*.jsonl
