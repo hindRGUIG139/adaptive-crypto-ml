@@ -13,11 +13,16 @@ def encrypt_file(input_file, output_file, key):
         file.write(ciphertext)
 
 def decrypt_file(input_file, output_file, key):
+
     with open(input_file, "rb") as file:
         nonce = file.read(8)
         ciphertext = file.read()
 
-    cipher = AES.new(key, AES.MODE_CTR)
+    cipher = AES.new(
+        key,
+        AES.MODE_CTR,
+        nonce=nonce
+    )
     plaintext = cipher.decrypt(ciphertext)
 
     with open(output_file, "wb") as file:
@@ -25,12 +30,12 @@ def decrypt_file(input_file, output_file, key):
 
 def main():
     key = get_random_bytes(32) # AES-256 key
-    encrypt_file("data/Screen Recording 2025-10-20 215011.mp4", "data/sample.enc", key)
-    decrypt_file("data/sample.enc", "data/sample_decrypted.mp4", key)
+    encrypt_file("data/csv1.csv", "data/sample.enc", key)
+    decrypt_file("data/sample.enc", "data/sample_decrypted.csv", key)
 
-    with open("data/Screen Recording 2025-10-20 215011.mp4", "rb") as file:
+    with open("data/csv1.csv", "rb") as file:
         original = file.read()
-    with open("data/sample_decrypted.mp4", "rb") as file:
+    with open("data/csv1.csv", "rb") as file:
         decrypted = file.read()
     print("Match:", original == decrypted)  # this is the real test
 if __name__ == "__main__":
