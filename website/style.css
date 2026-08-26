@@ -13,12 +13,17 @@ body {
     background: #0b0f19;
     color: #ffffff;
     line-height: 1.6;
+    padding-top: 75px;
 }
 
 a {
     text-decoration: none;
     color: inherit;
 }
+
+/* ============================================================
+   NAVBAR
+   ============================================================ */
 
 .navbar {
     height: 75px;
@@ -27,15 +32,22 @@ a {
     justify-content: space-between;
     padding: 0 8%;
     border-bottom: 1px solid #202638;
-    background: #0b0f19;
-    position: sticky;
+    background: rgba(11, 15, 25, 0.86);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    position: fixed;
     top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
     z-index: 100;
+    box-shadow: 0 1px 0 rgba(94, 231, 223, 0.05), 0 12px 24px -18px rgba(0, 0, 0, 0.6);
 }
 
 .logo {
     font-size: 20px;
     font-weight: bold;
+    letter-spacing: 0.01em;
 }
 
 .logo span {
@@ -45,18 +57,112 @@ a {
 
 .nav-links {
     display: flex;
-    gap: 30px;
+    gap: 34px;
 }
 
 .nav-links a {
+    position: relative;
     color: #aeb6c7;
     font-size: 14px;
-    transition: 0.3s;
+    letter-spacing: 0.02em;
+    padding: 6px 0;
+    transition: color 0.25s ease;
 }
 
-.nav-links a:hover {
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background: #5ee7df;
+    transition: width 0.25s ease;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
     color: #5ee7df;
 }
+
+.nav-links a:hover::after,
+.nav-links a.active::after {
+    width: 100%;
+}
+
+/* ---- Mobile nav toggle ---- */
+
+.nav-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 32px;
+    height: 32px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.nav-toggle span {
+    display: block;
+    height: 2px;
+    width: 100%;
+    background: #ffffff;
+    border-radius: 2px;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.nav-toggle.open span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.nav-toggle.open span:nth-child(2) {
+    opacity: 0;
+}
+
+.nav-toggle.open span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+.nav-mobile {
+    display: none;
+    position: fixed;
+    top: 75px;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    background: #0b0f19;
+    border-bottom: 1px solid #202638;
+    padding: 8px 8% 24px;
+    z-index: 99;
+}
+
+.nav-mobile.open {
+    display: flex;
+}
+
+.nav-mobile a {
+    padding: 14px 0;
+    color: #aeb6c7;
+    font-size: 15px;
+    border-bottom: 1px solid #171d2b;
+    transition: color 0.25s ease;
+}
+
+.nav-mobile a:last-child {
+    border-bottom: none;
+}
+
+.nav-mobile a:hover,
+.nav-mobile a.active {
+    color: #5ee7df;
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
 
 .hero {
     min-height: 85vh;
@@ -112,6 +218,7 @@ a {
     border-radius: 6px;
     font-weight: bold;
     font-size: 14px;
+    transition: opacity 0.25s ease, border-color 0.25s ease, background 0.25s ease;
 }
 
 .primary {
@@ -119,10 +226,23 @@ a {
     color: #071014;
 }
 
+.primary:hover {
+    opacity: 0.9;
+}
+
 .secondary {
     border: 1px solid #354052;
     color: white;
 }
+
+.secondary:hover {
+    border-color: #5ee7df;
+    color: #5ee7df;
+}
+
+/* ============================================================
+   SECTIONS
+   ============================================================ */
 
 .section {
     padding: 100px 8%;
@@ -291,22 +411,26 @@ a {
 }
 
 .aes {
-    width: 82%;
+    width: 28%;
     background: #5ee7df;
     color: #071014;
 }
 
 .chacha {
-    width: 100%;
+    width: 47%;
     background: #5ee7df;
     color: #071014;
 }
 
 .present {
-    width: 28%;
+    width: 23%;
     background: #5ee7df;
     color: #071014;
 }
+
+/* ============================================================
+   DEMO
+   ============================================================ */
 
 .demo-section {
     background: #0b0f19 !important;
@@ -356,6 +480,7 @@ select:focus {
     color: #071014;
     font-weight: bold;
     cursor: pointer;
+    transition: opacity 0.25s ease;
 }
 
 .predict-button:hover {
@@ -389,6 +514,209 @@ select:focus {
     display: none;
 }
 
+/* ---- File upload ---- */
+
+.upload-group {
+    margin-bottom: 30px;
+}
+
+.upload-drop {
+    position: relative;
+    border: 1.5px dashed #30394b;
+    border-radius: 6px;
+    padding: 22px 15px;
+    text-align: center;
+    background: #0b0f19;
+    transition: border-color 0.25s ease, background 0.25s ease;
+}
+
+.upload-drop.drag-over {
+    border-color: #5ee7df;
+    background: #121826;
+}
+
+.upload-drop input[type="file"] {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.upload-drop-inner {
+    color: #929bad;
+    font-size: 14px;
+    pointer-events: none;
+}
+
+.file-info {
+    margin-top: 15px;
+    padding: 15px 18px;
+    background: #0b0f19;
+    border: 1px solid #252d3d;
+    border-radius: 6px;
+}
+
+.file-info-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 13px;
+    padding: 5px 0;
+}
+
+.file-info-row span {
+    color: #929bad;
+}
+
+.file-info-row b {
+    color: white;
+    font-weight: 600;
+    text-align: right;
+    word-break: break-all;
+}
+
+.field-hint {
+    display: block;
+    margin-top: 10px;
+    color: #6d7688;
+    font-size: 12.5px;
+    line-height: 1.6;
+}
+
+/* ---- Crypto panel ---- */
+
+.crypto-panel {
+    margin-top: 30px;
+    padding-top: 25px;
+    border-top: 1px dashed #252d3d;
+}
+
+.crypto-panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+
+.crypto-panel-head span {
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: #5ee7df;
+    font-weight: bold;
+}
+
+.crypto-panel select {
+    width: auto;
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: bold;
+    color: #5ee7df;
+}
+
+.crypto-actions-row {
+    display: flex;
+    gap: 12px;
+    margin: 16px 0 4px;
+    flex-wrap: wrap;
+}
+
+.crypto-btn {
+    flex: 1;
+    min-width: 140px;
+    padding: 13px;
+    cursor: pointer;
+    background: none;
+}
+
+.crypto-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.crypto-result {
+    background: #0b0f19;
+    border: 1px solid #252d3d;
+    border-radius: 6px;
+    padding: 16px 18px;
+    margin-top: 14px;
+}
+
+.crypto-result-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 13px;
+    padding: 4px 0;
+}
+
+.crypto-result-row span {
+    color: #929bad;
+}
+
+.crypto-result-row b {
+    color: #5ee7df;
+    text-align: right;
+    word-break: break-all;
+    font-weight: 600;
+}
+
+.byte-preview {
+    font-family: monospace;
+    font-size: 11.5px;
+    background: #05070c;
+    color: #8fe9e2;
+    border-radius: 6px;
+    padding: 12px 14px;
+    margin-top: 10px;
+    word-break: break-all;
+    line-height: 1.7;
+}
+
+.verify-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12.5px;
+    font-weight: bold;
+    padding: 8px 14px;
+    border-radius: 999px;
+    margin-top: 10px;
+}
+
+.verify-badge::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.verify-badge.ok {
+    background: rgba(94, 231, 223, 0.12);
+    color: #5ee7df;
+}
+
+.verify-badge.fail {
+    background: rgba(255, 120, 120, 0.12);
+    color: #ff8a8a;
+}
+
+.crypto-note {
+    color: #6d7688;
+    font-size: 12.5px;
+    margin-top: 10px;
+    line-height: 1.6;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
 footer {
     padding: 50px 8%;
     border-top: 1px solid #202638;
@@ -405,10 +733,18 @@ footer a {
     color: #5ee7df;
 }
 
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
 @media (max-width: 900px) {
 
     .nav-links {
         display: none;
+    }
+
+    .nav-toggle {
+        display: flex;
     }
 
     .workflow {

@@ -26,7 +26,21 @@
                 <a href="#demo">Demo</a>
             </div>
 
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
         </nav>
+
+        <div class="nav-mobile" id="navMobile">
+            <a href="#home">Home</a>
+            <a href="#how-it-works">How It Works</a>
+            <a href="#algorithms">Algorithms</a>
+            <a href="#results">Results</a>
+            <a href="#demo">Demo</a>
+        </div>
     </header>
 
 
@@ -244,9 +258,9 @@
 
                 <div class="result-card">
 
-                    <p>RANDOM FOREST</p>
+                    <p>XGBOOST</p>
 
-                    <strong>72%</strong>
+                    <strong>76%</strong>
 
                     <span>
                         Best observed accuracy
@@ -257,7 +271,7 @@
 
                 <div class="result-card featured">
 
-                    <p>XGBOOST</p>
+                    <p>RANDOM FOREST</p>
 
                     <strong>77%</strong>
 
@@ -272,7 +286,7 @@
 
                     <p>CROSS-VALIDATION</p>
 
-                    <strong>69%</strong>
+                    <strong>71%</strong>
 
                     <span>
                         Mean accuracy
@@ -285,7 +299,7 @@
 
             <div class="distribution">
 
-                <h3>Best Algorithm Distribution</h3>
+                <h3>Algorithm Distribution</h3>
 
                 <div class="bar">
 
@@ -293,7 +307,7 @@
 
                     <div class="bar-background">
                         <div class="bar-fill aes">
-                            74
+                            102
                         </div>
                     </div>
 
@@ -306,7 +320,7 @@
 
                     <div class="bar-background">
                         <div class="bar-fill chacha">
-                            90
+                            169
                         </div>
                     </div>
 
@@ -319,7 +333,7 @@
 
                     <div class="bar-background">
                         <div class="bar-fill present">
-                            25
+                            84
                         </div>
                     </div>
 
@@ -341,12 +355,41 @@
             <h2>Find the Best Algorithm</h2>
 
             <p class="section-description">
-                Enter the current context and let the system
-                recommend an encryption algorithm.
+                Enter the current context — or upload a real file — and
+                let the system recommend an encryption algorithm.
             </p>
 
 
             <div class="demo-container">
+
+                <div class="form-group upload-group">
+
+                    <label for="fileUpload">
+                        Upload a Real File (optional)
+                    </label>
+
+                    <div class="upload-drop" id="uploadDrop">
+                        <input type="file" id="fileUpload">
+                        <div class="upload-drop-inner">
+                            <span id="uploadPromptText">Click to choose a file, or drag it here</span>
+                        </div>
+                    </div>
+
+                    <div class="file-info" id="fileInfo" style="display:none;">
+                        <div class="file-info-row"><span>Name</span><b id="fiName">—</b></div>
+                        <div class="file-info-row"><span>Detected Type</span><b id="fiType">—</b></div>
+                        <div class="file-info-row"><span>Size</span><b id="fiSize">—</b></div>
+                    </div>
+
+                    <span class="field-hint">
+                        Uploading a file auto-fills the fields below with its
+                        real type and size, and unlocks actual encryption
+                        further down. Everything runs locally in your
+                        browser — nothing is ever sent anywhere.
+                    </span>
+
+                </div>
+
 
                 <div class="form-group">
 
@@ -376,6 +419,29 @@
                             PDF
                         </option>
 
+                        <option value="JSON">
+                          JSON
+                        </option>
+
+                        <option value="XML">
+                          XML
+                        </option>
+
+                        <option value="DOCX">
+                          DOCX
+                        </option>
+
+                        <option value="CSV">
+                          CSV
+                        </option>
+
+                        <option value="Archive">
+                          Archive
+                        </option>
+
+                        <option value="Unknown">
+                          Other
+                        </option>
                     </select>
 
                 </div>
@@ -455,6 +521,37 @@
                     <span id="predictionReason">
                         Based on the provided context.
                     </span>
+
+                </div>
+
+
+                <div id="cryptoPanel" class="crypto-panel hidden">
+
+                    <div class="crypto-panel-head">
+                        <span>PROTECT THIS FILE</span>
+                        <select id="cipherChoice">
+                            <option value="AES-256">AES-256</option>
+                            <option value="ChaCha20">ChaCha20</option>
+                            <option value="PRESENT">PRESENT</option>
+                        </select>
+                    </div>
+
+                    <span class="field-hint">
+                        In-browser demo limits: 25 MB for AES-256, 15 MB
+                        for ChaCha20, 1 MB for PRESENT (its unoptimized
+                        JavaScript implementation is the slow one here too).
+                    </span>
+
+                    <div class="crypto-actions-row">
+                        <button class="button secondary crypto-btn" id="encryptBtn" type="button">
+                            Encrypt File
+                        </button>
+                        <button class="button secondary crypto-btn" id="decryptBtn" type="button" disabled>
+                            Decrypt File
+                        </button>
+                    </div>
+
+                    <div id="cryptoStatus"></div>
 
                 </div>
 
