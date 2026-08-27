@@ -911,39 +911,142 @@ select {
    DISTRIBUTION
    ============================================================ */
 
-.distribution {
-    max-width: 750px;
+/* ============================================================
+   LABEL DISTRIBUTION
+   ============================================================ */
+
+.distribution-section {
+    display: grid;
+
+    grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+
+    gap: 35px;
+
+    align-items: center;
+
+    margin-top: 20px;
 }
 
-.distribution h3 {
-    margin-bottom: 30px;
+
+/* ============================================================
+   DISTRIBUTION CARD
+   ============================================================ */
+
+.distribution {
+    width: 100%;
+
+    padding: 38px 36px;
+
+    background: var(--bg-card);
+
+    border: 1px solid var(--border);
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 12px 35px var(--shadow);
+
+    transition:
+        background 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+
+/* ============================================================
+   DISTRIBUTION HEADER
+   ============================================================ */
+
+.distribution-header {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 25px;
+}
+
+.distribution-header h3 {
+    margin: 0;
 
     color: var(--text-heading);
+
+    font-size: 18px;
+
+    font-weight: 650;
 }
+
+.distribution-header span {
+    color: var(--text-muted);
+
+    font-family:
+        "SFMono-Regular",
+        Consolas,
+        "Liberation Mono",
+        monospace;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    letter-spacing: 1.5px;
+
+    white-space: nowrap;
+}
+
+
+/* ============================================================
+   DISTRIBUTION BARS
+   ============================================================ */
 
 .bar {
     display: grid;
 
-    grid-template-columns: 100px 1fr;
+    grid-template-columns: 125px 1fr;
 
-    gap: 20px;
+    gap: 18px;
 
     align-items: center;
 
-    margin-bottom: 20px;
+    margin-bottom: 18px;
 }
 
+.bar:last-child {
+    margin-bottom: 0;
+}
+
+.bar-label {
+    color: var(--text-main);
+
+    font-size: 14px;
+
+    font-weight: 500;
+}
+
+
+/* ============================================================
+   BAR BACKGROUND
+   ============================================================ */
+
 .bar-background {
-    height: 35px;
+    height: 20px;
 
     background: var(--bar-bg);
 
-    border-radius: 8px;
+    border-radius: 999px;
 
     overflow: hidden;
 
-    border: 1px solid var(--border-light);
+    border: none;
 }
+
+
+/* ============================================================
+   BAR FILL
+   ============================================================ */
 
 .bar-fill {
     height: 100%;
@@ -952,42 +1055,135 @@ select {
 
     align-items: center;
 
-    padding-left: 12px;
+    justify-content: flex-end;
 
-    font-size: 13px;
+    padding-right: 0;
 
-    font-weight: 700;
+    font-size: 0;
 
-    border-radius: 7px;
+    border-radius: 999px;
 
     transition:
-        width 0.5s ease;
+        width 0.6s ease;
 }
 
-.aes {
-    width: 28%;
 
-    background: var(--accent);
-
-    color: var(--button-text);
-}
+/* 169 / 355 = 47.6% */
 
 .chacha {
-    width: 47%;
+    width: 47.6%;
+
+    background: var(--accent);
+}
+
+
+/* 102 / 355 = 28.7% */
+
+.aes {
+    width: 28.7%;
 
     background: var(--accent);
 
-    color: var(--button-text);
+    opacity: 0.65;
 }
+
+
+/* 84 / 355 = 23.7% */
 
 .present {
-    width: 23%;
+    width: 23.7%;
 
     background: var(--accent);
 
-    color: var(--button-text);
+    opacity: 0.45;
 }
 
+
+/* ============================================================
+   DISTRIBUTION DESCRIPTION
+   ============================================================ */
+
+.distribution-description {
+    padding: 22px 0 22px 28px;
+
+    border-left: 3px solid var(--accent);
+}
+
+.distribution-description p {
+    margin: 0;
+
+    color: var(--text-main);
+
+    font-size: 17px;
+
+    line-height: 1.8;
+
+    max-width: 560px;
+}
+
+
+/* ============================================================
+   LIGHT MODE REFINEMENT
+   ============================================================ */
+
+[data-theme="light"] .distribution {
+    box-shadow:
+        0 12px 30px rgba(15, 23, 42, 0.07);
+}
+
+[data-theme="light"] .distribution-description p {
+    color: #1e293b;
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+    .distribution-section {
+        grid-template-columns: 1fr;
+
+        gap: 35px;
+    }
+
+    .distribution-description {
+        padding: 0 0 0 22px;
+    }
+}
+
+
+@media (max-width: 600px) {
+
+    .distribution {
+        padding: 28px 22px;
+    }
+
+    .distribution-header {
+        align-items: flex-start;
+    }
+
+    .bar {
+        grid-template-columns: 85px 1fr;
+
+        gap: 12px;
+    }
+
+    .bar-label {
+        font-size: 13px;
+    }
+
+    .distribution-description {
+        padding-left: 18px;
+    }
+
+    .distribution-description p {
+        font-size: 14px;
+
+        line-height: 1.7;
+    }
+}
 
 /* ============================================================
    DEMO SECTION
@@ -1334,17 +1530,11 @@ select:focus {
 
 .crypto-panel select {
     width: auto;
-
     padding: 8px 16px;
-
     border-radius: 999px;
-
     font-size: 13px;
-
     font-weight: 650;
-
     color: var(--accent);
-
     background: var(--bg-input);
 }
 

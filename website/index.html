@@ -299,53 +299,61 @@
             </div>
 
 
-            <div class="distribution">
+            <div class="distribution-section">
 
-                <h3>Algorithm Distribution</h3>
+    <div class="distribution">
 
-                <div class="bar">
+        <div class="distribution-header">
+            <h3>Label distribution</h3>
+            <span>355 TOTAL</span>
+        </div>
 
-                    <span>AES</span>
+        <div class="bar">
+            <div class="bar-label">ChaCha20</div>
 
-                    <div class="bar-background">
-                        <div class="bar-fill aes">
-                            102
-                        </div>
-                    </div>
-
+            <div class="bar-background">
+                <div class="bar-fill chacha">
+                    169
                 </div>
-
-
-                <div class="bar">
-
-                    <span>ChaCha20</span>
-
-                    <div class="bar-background">
-                        <div class="bar-fill chacha">
-                            169
-                        </div>
-                    </div>
-
-                </div>
-
-
-                <div class="bar">
-
-                    <span>PRESENT</span>
-
-                    <div class="bar-background">
-                        <div class="bar-fill present">
-                            84
-                        </div>
-                    </div>
-
-                </div>
-
             </div>
+        </div>
 
-        </section>
+        <div class="bar">
+            <div class="bar-label">AES</div>
+
+            <div class="bar-background">
+                <div class="bar-fill aes">
+                    102
+                </div>
+            </div>
+        </div>
+
+        <div class="bar">
+            <div class="bar-label">PRESENT</div>
+
+            <div class="bar-background">
+                <div class="bar-fill present">
+                    84
+                </div>
+            </div>
+        </div>
+
+    </div>
 
 
+    <div class="distribution-description">
+
+        <p>
+            These labels are not manually assigned. They are generated
+            automatically by the project's scoring system after benchmarking
+            the three algorithms. The distribution above reflects the
+            decisions produced by the current scoring system and benchmark
+            conditions — it was not artificially balanced.
+        </p>
+
+    </div>
+
+</div>
         <!-- DEMO -->
 
         <section id="demo" class="section demo-section">
