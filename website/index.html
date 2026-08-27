@@ -31,7 +31,9 @@
                 <span></span>
                 <span></span>
             </button>
-
+            <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+              <span id="theme-icon">☀</span>
+            </button>
         </nav>
 
         <div class="nav-mobile" id="navMobile">
@@ -535,12 +537,6 @@
                             <option value="PRESENT">PRESENT</option>
                         </select>
                     </div>
-
-                    <span class="field-hint">
-                        In-browser demo limits: 25 MB for AES-256, 15 MB
-                        for ChaCha20, 1 MB for PRESENT (its unoptimized
-                        JavaScript implementation is the slow one here too).
-                    </span>
 
                     <div class="crypto-actions-row">
                         <button class="button secondary crypto-btn" id="encryptBtn" type="button">
