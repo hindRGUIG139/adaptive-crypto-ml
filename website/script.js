@@ -1782,7 +1782,7 @@ document.addEventListener(
             );
         }
 
-
+        
         window.addEventListener(
             'scroll',
             updateActiveLink,
