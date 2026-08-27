@@ -1797,6 +1797,436 @@ footer a:hover {
     background: var(--text-subtle);
 }
 
+/* ============================================================
+   TECHNOLOGY STACK
+   ============================================================ */
+
+.technology-section {
+    width: 100%;
+    margin: 0;
+    padding: 100px 8% 90px;
+
+    background: var(--bg-section-alt);
+
+    transition: background-color 0.3s ease;
+}
+
+.technology-header,
+.technology-grid,
+.github-card {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+/* ------------------------------------------------------------
+   HEADER
+   ------------------------------------------------------------ */
+
+.technology-header {
+    margin-bottom: 38px;
+}
+
+.technology-label {
+    display: block;
+
+    margin-bottom: 12px;
+
+    color: var(--accent);
+
+    font-family:
+        "SFMono-Regular",
+        Consolas,
+        monospace;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.7px;
+}
+
+.technology-header h2 {
+    margin: 0 0 12px;
+
+    color: var(--text-heading);
+
+    font-size: 38px;
+
+    line-height: 1.1;
+
+    letter-spacing: -0.03em;
+}
+
+.technology-header p {
+    max-width: 620px;
+
+    margin: 0;
+
+    color: var(--text-muted);
+
+    font-size: 14px;
+
+    line-height: 1.7;
+}
+
+
+/* ============================================================
+   TECHNOLOGY GRID
+   ============================================================ */
+
+.technology-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 16px;
+}
+
+
+/* ------------------------------------------------------------
+   TECHNOLOGY CARD
+   ------------------------------------------------------------ */
+
+.technology-card {
+    min-height: 145px;
+
+    padding: 24px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: space-between;
+
+    background: var(--bg-card);
+
+    border: 1px solid var(--border);
+
+    border-radius: 15px;
+
+    box-shadow:
+        0 8px 25px var(--shadow);
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease,
+        background 0.3s ease;
+}
+
+.technology-card:hover {
+    transform: translateY(-4px);
+
+    border-color: var(--accent-border);
+
+    box-shadow:
+        0 14px 32px var(--shadow);
+}
+
+
+/* ------------------------------------------------------------
+   CATEGORY
+   ------------------------------------------------------------ */
+
+.technology-category {
+    color: var(--accent);
+
+    font-family:
+        "SFMono-Regular",
+        Consolas,
+        monospace;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.2px;
+}
+
+
+/* ------------------------------------------------------------
+   TAGS
+   ------------------------------------------------------------ */
+
+.technology-tags {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 7px;
+
+    margin-top: 25px;
+}
+
+.technology-tags span {
+    padding: 5px 10px;
+
+    background: var(--bg-input);
+
+    border: 1px solid var(--border-strong);
+
+    border-radius: 999px;
+
+    color: var(--text-muted);
+
+    font-family:
+        "SFMono-Regular",
+        Consolas,
+        monospace;
+
+    font-size: 14px;
+
+    line-height: 1;
+
+    transition:
+        color 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease;
+}
+
+.technology-tags span:hover {
+    color: var(--accent);
+
+    border-color: var(--accent-border);
+
+    background: var(--accent-soft);
+}
+
+
+/* ============================================================
+   GITHUB CARD
+   ============================================================ */
+
+.github-card {
+    position: relative;
+
+    margin-top: 28px;
+
+    padding: 30px 32px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 22px;
+
+    text-decoration: none;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--bg-card),
+            var(--bg-section-alt)
+        );
+
+    border: 1px solid var(--border);
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 10px 30px var(--shadow);
+
+    overflow: hidden;
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease,
+        background 0.3s ease;
+}
+
+.github-card:hover {
+    transform: translateY(-4px);
+
+    border-color: var(--accent-border);
+
+    box-shadow:
+        0 16px 38px var(--shadow);
+}
+
+
+/* ------------------------------------------------------------
+   GITHUB LOGO
+   ------------------------------------------------------------ */
+
+.github-logo {
+    width: 54px;
+    height: 54px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 13px;
+
+    background: var(--accent-soft);
+
+    border: 1px solid var(--accent-border);
+
+    color: var(--accent);
+}
+
+.github-logo svg {
+    width: 27px;
+    height: 27px;
+
+    fill: currentColor;
+}
+
+
+/* ------------------------------------------------------------
+   GITHUB TEXT
+   ------------------------------------------------------------ */
+
+.github-info {
+    flex: 1;
+}
+
+.github-label {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: var(--accent);
+
+    font-family:
+        "SFMono-Regular",
+        Consolas,
+        monospace;
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.4px;
+}
+
+.github-info h3 {
+    margin: 0 0 7px;
+
+    color: var(--text-heading);
+
+    font-size: 19px;
+
+    font-weight: 650;
+}
+
+.github-info p {
+    max-width: 650px;
+
+    margin: 0;
+
+    color: var(--text-muted);
+
+    font-size: 13px;
+
+    line-height: 1.65;
+}
+
+
+/* ------------------------------------------------------------
+   ARROW
+   ------------------------------------------------------------ */
+
+.github-arrow {
+    width: 38px;
+    height: 38px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid var(--border-strong);
+
+    border-radius: 50%;
+
+    color: var(--text-muted);
+
+    font-size: 18px;
+
+    transition:
+        color 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.github-card:hover .github-arrow {
+    color: var(--accent);
+
+    background: var(--accent-soft);
+
+    border-color: var(--accent-border);
+
+    transform: translate(2px, -2px);
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+    .technology-section {
+        padding-left: 6%;
+        padding-right: 6%;
+    }
+
+    .technology-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+}
+
+
+@media (max-width: 600px) {
+
+    .technology-section {
+        padding-top: 70px;
+
+        padding-bottom: 65px;
+    }
+
+    .technology-header h2 {
+        font-size: 32px;
+    }
+
+    .technology-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .technology-card {
+        min-height: 130px;
+    }
+
+    .github-card {
+        padding: 24px;
+
+        align-items: flex-start;
+    }
+
+    .github-arrow {
+        display: none;
+    }
+
+    .github-info h3 {
+        font-size: 17px;
+    }
+
+    .github-info p {
+        font-size: 12px;
+    }
+}
 
 /* ============================================================
    RESPONSIVE — TABLETS
@@ -1953,7 +2383,6 @@ footer a:hover {
 }
 
 
-
 /* ============================================================
    ACCESSIBILITY
    ============================================================ */
@@ -1973,4 +2402,6 @@ footer a:hover {
 
         animation-iteration-count: 1 !important;
     }
+
+
 }
